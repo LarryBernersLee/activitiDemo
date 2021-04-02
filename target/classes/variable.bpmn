@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:yaoqiang="http://bpmn.sourceforge.net" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://sourceforge.net/bpmn/definitions/_1617264986009" id="_1617264986009" name="" exporter="activiti Modeler" exporterVersion="3.0.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <process id="variableProcess" name="包含监听器的流程" isExecutable="true">
+    <startEvent id="start" name="开始">
+      <extensionElements>
+        <activiti:executionListener event="start" class="com.test.listener.InstanceListener"></activiti:executionListener>
+      </extensionElements>
+    </startEvent>
+    <userTask id="submit" name="提交任务" xmlns:activiti="http://activiti.org/schema/1.0/bpmn" activiti:assignee="user1">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.test.listener.ProcessListener"></activiti:taskListener>
+        <activiti:taskListener event="assignment" class="com.test.listener.ProcessListener"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="audit1" name="一审" xmlns:activiti="http://activiti.org/schema/1.0/bpmn" activiti:assignee="${assign}">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.test.listener.ProcessListener"></activiti:taskListener>
+        <activiti:taskListener event="assignment" class="com.test.listener.ProcessListener"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="audit2" name="二审" xmlns:activiti="http://activiti.org/schema/1.0/bpmn" activiti:assignee="user3">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.test.listener.ProcessListener"></activiti:taskListener>
+        <activiti:taskListener event="assignment" class="com.test.listener.ProcessListener"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="end" name="流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" class="com.test.listener.InstanceListener"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow1" name="开始流程" sourceRef="start" targetRef="submit">
+      <extensionElements>
+        <activiti:executionListener event="take" class="com.test.listener.InstanceListener"></activiti:executionListener>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="submit" targetRef="audit1"></sequenceFlow>
+    <serviceTask id="serviceTask" name="自动服务" activiti:class="com.test.listener.JavaService">
+      <extensionElements>
+        <activiti:executionListener event="start" class="com.test.listener.InstanceListener"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="SequenceFlow_0bytdjy" sourceRef="audit1" targetRef="serviceTask"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1opuq5y" sourceRef="serviceTask" targetRef="audit2"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1ongiqk" sourceRef="audit2" targetRef="end"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_variableProcess">
+    <bpmndi:BPMNPlane bpmnElement="variableProcess" id="BPMNPlane_variableProcess">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="35.0" width="35.0" x="191.0" y="105.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="submit" id="BPMNShape_submit">
+        <omgdc:Bounds height="55.0" width="105.0" x="156.0" y="191.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="audit1" id="BPMNShape_audit1">
+        <omgdc:Bounds height="55.0" width="105.0" x="156.0" y="285.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="audit2" id="BPMNShape_audit2">
+        <omgdc:Bounds height="55.0" width="105.0" x="156.0" y="520.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="191.0" y="624.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="serviceTask" id="BPMNShape_serviceTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="159.0" y="392.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="208.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="208.0" y="191.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="44.0" x="223.0" y="157.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="208.0" y="246.0"></omgdi:waypoint>
+        <omgdi:waypoint x="208.0" y="285.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_0bytdjy" id="BPMNEdge_SequenceFlow_0bytdjy">
+        <omgdi:waypoint x="208.0" y="340.0"></omgdi:waypoint>
+        <omgdi:waypoint x="209.0" y="392.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1opuq5y" id="BPMNEdge_SequenceFlow_1opuq5y">
+        <omgdi:waypoint x="209.0" y="472.0"></omgdi:waypoint>
+        <omgdi:waypoint x="208.0" y="520.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1ongiqk" id="BPMNEdge_SequenceFlow_1ongiqk">
+        <omgdi:waypoint x="208.0" y="575.0"></omgdi:waypoint>
+        <omgdi:waypoint x="208.0" y="624.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

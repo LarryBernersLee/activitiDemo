@@ -1,0 +1,6 @@
+com\test\TestDeploy.class
+com\test\TestComplete.class
+com\test\TestWork.class
+com\test\BaseTestCase.class
+com\test\TestStart.class
+com\test\BpmDefinitionTest.class

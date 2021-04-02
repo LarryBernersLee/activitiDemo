@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1616151625444" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="Import-video-audit" isClosed="false" isExecutable="true" name="瑙嗛�?�煎�?" processType="None">
+    <startEvent id="startevent1" name="Start"/>
+    <userTask activiti:exclusive="true" id="Transcode" name="杞�?">
+      <extensionElements>
+        <activiti:taskListener delegateExpression="${CreateTranscoding}" event="create"/>
+      </extensionElements>
+    </userTask>
+    <userTask activiti:exclusive="true" id="AutoPickFrame" name="鎶藉�?">
+      <extensionElements>
+        <activiti:taskListener delegateExpression="${CreateFrame}" event="create"/>
+      </extensionElements>
+    </userTask>
+    <userTask activiti:exclusive="true" id="ImportCatalog" name="鍏ョ紪鐩簱">
+      <extensionElements>
+        <activiti:taskListener delegateExpression="${CreateRelease}" event="create"/>
+        <activiti:taskListener delegateExpression="${CompleteRelease}" event="complete"/>
+      </extensionElements>
+    </userTask>
+    <endEvent id="endevent1" name="End">
+      <extensionElements>
+        <activiti:executionListener delegateExpression="${CreateFinish}" event="start"/>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow3" sourceRef="Transcode" targetRef="AutoPickFrame"/>
+    <sequenceFlow id="flow7" sourceRef="startevent1" targetRef="Transcode"/>
+    <userTask activiti:assignee="${userName}" activiti:exclusive="true" id="UploadAudit" name="涓婁紶�?�℃�?">
+      <extensionElements>
+        <activiti:taskListener delegateExpression="${UploadAudit}" event="create"/>
+      </extensionElements>
+    </userTask>
+    <userTask activiti:exclusive="true" id="DeleteResource" name="鍒犻櫎璧勬簮">
+      <extensionElements>
+        <activiti:taskListener delegateExpression="${DeleteResource}" event="create"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow10" name="閫氳�?" sourceRef="UploadAudit" targetRef="ImportCatalog">
+      <conditionExpression xsi:type="tFormalExpression">
+        <![CDATA[${message=='1'}]]>
+      </conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow11" name="涓嶉�氳�?" sourceRef="UploadAudit" targetRef="DeleteResource">
+      <conditionExpression xsi:type="tFormalExpression">
+        <![CDATA[${message=='0'}]]>
+      </conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="DeleteResource" targetRef="endevent1"/>
+    <sequenceFlow id="flow13" sourceRef="AutoPickFrame" targetRef="UploadAudit"/>
+    <sequenceFlow id="flow14" sourceRef="ImportCatalog" targetRef="endevent1"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#292929;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="Import-video-audit">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="Shape-startevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="90.0" y="130.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="Transcode" id="Shape-Transcode">
+        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="120.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="AutoPickFrame" id="Shape-AutoPickFrame">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="120.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ImportCatalog" id="Shape-ImportCatalog">
+        <omgdc:Bounds height="55.0" width="105.0" x="730.0" y="120.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="Shape-endevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="910.0" y="130.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UploadAudit" id="Shape-UploadAudit">
+        <omgdc:Bounds height="55.0" width="105.0" x="536.0" y="120.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DeleteResource" id="Shape-DeleteResource">
+        <omgdc:Bounds height="55.0" width="105.0" x="536.0" y="238.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13" sourceElement="AutoPickFrame" targetElement="UploadAudit">
+        <omgdi:waypoint x="465.0" y="147.5"/>
+        <omgdi:waypoint x="536.0" y="147.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14" sourceElement="ImportCatalog" targetElement="endevent1">
+        <omgdi:waypoint x="835.0" y="147.5"/>
+        <omgdi:waypoint x="910.0" y="146.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3" sourceElement="Transcode" targetElement="AutoPickFrame">
+        <omgdi:waypoint x="285.0" y="147.5"/>
+        <omgdi:waypoint x="360.0" y="147.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7" sourceElement="startevent1" targetElement="Transcode">
+        <omgdi:waypoint x="122.0" y="146.0"/>
+        <omgdi:waypoint x="180.0" y="147.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10" sourceElement="UploadAudit" targetElement="ImportCatalog">
+        <omgdi:waypoint x="641.0" y="147.5"/>
+        <omgdi:waypoint x="730.0" y="147.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="666.0" y="151.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11" sourceElement="UploadAudit" targetElement="DeleteResource">
+        <omgdi:waypoint x="588.5" y="175.0"/>
+        <omgdi:waypoint x="588.5" y="238.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="596.0" y="189.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12" sourceElement="DeleteResource" targetElement="endevent1">
+        <omgdi:waypoint x="641.0" y="265.0"/>
+        <omgdi:waypoint x="927.0" y="265.0"/>
+        <omgdi:waypoint x="927.0" y="161.9687194226713"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

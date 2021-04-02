@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ActivitiSpring:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ActivitiSpring</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ActivitiSpring.war">
+      <element id="artifact" artifact-name="ActivitiSpring:war exploded" />
+    </root>
+  </artifact>
+</component>

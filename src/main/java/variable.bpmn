@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:yaoqiang="http://bpmn.sourceforge.net" id="_1617264986009" name="" targetNamespace="http://sourceforge.net/bpmn/definitions/_1617264986009" exporter="activiti Modeler" exporterVersion="3.0.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <process id="variableProcess" name="包含监听器的流程" isExecutable="true">
+    <startEvent id="start" name="开始">
+      <extensionElements>
+        <activiti:executionListener class="com.test.listener.InstanceListener" event="start" />
+      </extensionElements>
+    </startEvent>
+    <userTask id="submit" name="提交任务" activiti:assignee="user1">
+      <extensionElements>
+        <activiti:taskListener class="com.test.listener.ProcessListener" event="create" />
+        <activiti:taskListener class="com.test.listener.ProcessListener" event="assignment" />
+      </extensionElements>
+    </userTask>
+    <userTask id="audit1" name="一审" activiti:assignee="${assign}">
+      <extensionElements>
+        <activiti:taskListener class="com.test.listener.ProcessListener" event="create" />
+        <activiti:taskListener class="com.test.listener.ProcessListener" event="assignment" />
+      </extensionElements>
+      <outgoing>SequenceFlow_0bytdjy</outgoing>
+    </userTask>
+    <userTask id="audit2" name="二审" activiti:assignee="user3">
+      <extensionElements>
+        <activiti:taskListener class="com.test.listener.ProcessListener" event="create" />
+        <activiti:taskListener class="com.test.listener.ProcessListener" event="assignment" />
+      </extensionElements>
+      <incoming>SequenceFlow_1opuq5y</incoming>
+      <outgoing>SequenceFlow_1ongiqk</outgoing>
+    </userTask>
+    <endEvent id="end" name="流程结束">
+      <extensionElements>
+        <activiti:executionListener class="com.test.listener.InstanceListener" event="end" />
+      </extensionElements>
+      <incoming>SequenceFlow_1ongiqk</incoming>
+    </endEvent>
+    <sequenceFlow id="flow1" name="开始流程" sourceRef="start" targetRef="submit">
+      <extensionElements>
+        <activiti:executionListener class="com.test.listener.InstanceListener" event="take" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="submit" targetRef="audit1" />
+    <serviceTask id="serviceTask" name="自动服务" activiti:class="com.test.listener.JavaService">
+      <extensionElements>
+        <activiti:executionListener class="com.test.listener.ProcessListener" event="start" />
+      </extensionElements>
+      <incoming>SequenceFlow_0bytdjy</incoming>
+      <outgoing>SequenceFlow_1opuq5y</outgoing>
+    </serviceTask>
+    <sequenceFlow id="SequenceFlow_0bytdjy" sourceRef="audit1" targetRef="serviceTask" />
+    <sequenceFlow id="SequenceFlow_1opuq5y" sourceRef="serviceTask" targetRef="audit2" />
+    <sequenceFlow id="SequenceFlow_1ongiqk" sourceRef="audit2" targetRef="end" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_variableProcess">
+    <bpmndi:BPMNPlane id="BPMNPlane_variableProcess" bpmnElement="variableProcess">
+      <bpmndi:BPMNShape id="BPMNShape_start" bpmnElement="start">
+        <omgdc:Bounds x="191" y="105" width="35" height="35" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="198" y="81" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_submit" bpmnElement="submit">
+        <omgdc:Bounds x="156" y="191" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_audit1" bpmnElement="audit1">
+        <omgdc:Bounds x="156" y="285" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_audit2" bpmnElement="audit2">
+        <omgdc:Bounds x="156" y="520" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_end" bpmnElement="end">
+        <omgdc:Bounds x="191" y="624" width="35" height="35" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="187" y="678" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow1" bpmnElement="flow1">
+        <omgdi:waypoint x="208" y="140" />
+        <omgdi:waypoint x="208" y="191" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="223" y="157" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow2" bpmnElement="flow2">
+        <omgdi:waypoint x="208" y="246" />
+        <omgdi:waypoint x="208" y="285" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0l5cv7o_di" bpmnElement="serviceTask">
+        <omgdc:Bounds x="159" y="392" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bytdjy_di" bpmnElement="SequenceFlow_0bytdjy">
+        <omgdi:waypoint x="209" y="340" />
+        <omgdi:waypoint x="209" y="392" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1opuq5y_di" bpmnElement="SequenceFlow_1opuq5y">
+        <omgdi:waypoint x="209" y="472" />
+        <omgdi:waypoint x="209" y="520" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ongiqk_di" bpmnElement="SequenceFlow_1ongiqk">
+        <omgdi:waypoint x="209" y="575" />
+        <omgdi:waypoint x="209" y="624" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
